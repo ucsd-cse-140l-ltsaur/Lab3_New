@@ -40,6 +40,9 @@ module Lab3_140L (
  output wire [6:0] o_segment4         // 7-segment1 (LHS)
 );
 
+// need to latch in the setting at the rising edge
+`define BUFFER_SEGMENTS
+`ifdef BUFFER_SEGMENTS
 //----------------------------------------------------------------------------------------------------------------------------
 reg [6:0] segment1, segment2, segment3, segment4;
 assign o_segment1 = segment1;
@@ -47,93 +50,181 @@ assign o_segment2 = segment2;
 assign o_segment3 = segment3;
 assign o_segment4 = segment4;
 
-always @(*)
+always @(posedge i_clk)
 begin
        segment1[0] = ((sec_l_digit == 0)|                   (sec_l_digit == 2)|(sec_l_digit == 3)|
-                      (sec_l_digit == 5)|                   (sec_l_digit == 7)|(sec_l_digit == 8)|(sec_l_digit == 9))? 1: 0;
+                      (sec_l_digit == 5)|                   (sec_l_digit == 7)|(sec_l_digit == 8)|(sec_l_digit == 9));//? 1: 0;
 					  
        segment1[1] = ((sec_l_digit == 0)|(sec_l_digit == 1)|(sec_l_digit == 2)|(sec_l_digit == 3)|(sec_l_digit == 4)|
-                                                            (sec_l_digit == 7)|(sec_l_digit == 8)|(sec_l_digit == 9))? 1: 0;
+                                                            (sec_l_digit == 7)|(sec_l_digit == 8)|(sec_l_digit == 9));//? 1: 0;
 					  
        segment1[2] = ((sec_l_digit == 0)|(sec_l_digit == 1)|                   (sec_l_digit == 3)|(sec_l_digit == 4)|
-                      (sec_l_digit == 5)|(sec_l_digit == 6)|(sec_l_digit == 7)|(sec_l_digit == 8)|(sec_l_digit == 9))? 1: 0;
+                      (sec_l_digit == 5)|(sec_l_digit == 6)|(sec_l_digit == 7)|(sec_l_digit == 8)|(sec_l_digit == 9));//? 1: 0;
 					  
        segment1[3] = ((sec_l_digit == 0)|                   (sec_l_digit == 2)|(sec_l_digit == 3)|
-                      (sec_l_digit == 5)|(sec_l_digit == 6)|                   (sec_l_digit == 8)                   )? 1: 0;
+                      (sec_l_digit == 5)|(sec_l_digit == 6)|                   (sec_l_digit == 8)                   );//? 1: 0;
 					  
        segment1[4] = ((sec_l_digit == 0)|                   (sec_l_digit == 2)|
-                                         (sec_l_digit == 6)|                   (sec_l_digit == 8)                   )? 1: 0;
+                                         (sec_l_digit == 6)|                   (sec_l_digit == 8)                   );//? 1: 0;
 										 
        segment1[5] = ((sec_l_digit == 0)|                                                         (sec_l_digit == 4)|
-                      (sec_l_digit == 5)|(sec_l_digit == 6)|                   (sec_l_digit == 8)|(sec_l_digit == 9))? 1: 0;
+                      (sec_l_digit == 5)|(sec_l_digit == 6)|                   (sec_l_digit == 8)|(sec_l_digit == 9));//? 1: 0;
 					  
        segment1[6] = (                                      (sec_l_digit == 2)|(sec_l_digit == 3)|(sec_l_digit == 4)|
-                      (sec_l_digit == 5)|(sec_l_digit == 6)|                   (sec_l_digit == 8)|(sec_l_digit == 9))? 1: 0;
+                      (sec_l_digit == 5)|(sec_l_digit == 6)|                   (sec_l_digit == 8)|(sec_l_digit == 9));//? 1: 0;
 //---------------------------------------------------------------------------------------------------------------------------------
        segment2[0] = ((sec_h_digit == 0)|                   (sec_h_digit == 2)|(sec_h_digit == 3)|
-                      (sec_h_digit == 5)|                   (sec_h_digit == 7)|(sec_h_digit == 8)|(sec_h_digit == 9))? 1: 0;
+                      (sec_h_digit == 5)|                   (sec_h_digit == 7)|(sec_h_digit == 8)|(sec_h_digit == 9));//? 1: 0;
 					  
        segment2[1] = ((sec_h_digit == 0)|(sec_h_digit == 1)|(sec_h_digit == 2)|(sec_h_digit == 3)|(sec_h_digit == 4)|
-                                                            (sec_h_digit == 7)|(sec_h_digit == 8)|(sec_h_digit == 9))? 1: 0;
+                                                            (sec_h_digit == 7)|(sec_h_digit == 8)|(sec_h_digit == 9));//? 1: 0;
 					  
        segment2[2] = ((sec_h_digit == 0)|(sec_h_digit == 1)|                   (sec_h_digit == 3)|(sec_h_digit == 4)|
-                      (sec_h_digit == 5)|(sec_h_digit == 6)|(sec_h_digit == 7)|(sec_h_digit == 8)|(sec_h_digit == 9))? 1: 0;
+                      (sec_h_digit == 5)|(sec_h_digit == 6)|(sec_h_digit == 7)|(sec_h_digit == 8)|(sec_h_digit == 9));//? 1: 0;
 					  
        segment2[3] = ((sec_h_digit == 0)|                   (sec_h_digit == 2)|(sec_h_digit == 3)|
-                      (sec_h_digit == 5)|(sec_h_digit == 6)|                   (sec_h_digit == 8)                   )? 1: 0;
+                      (sec_h_digit == 5)|(sec_h_digit == 6)|                   (sec_h_digit == 8)                   );//? 1: 0;
 					  
        segment2[4] = ((sec_h_digit == 0)|                   (sec_h_digit == 2)|
-                                         (sec_h_digit == 6)|                   (sec_h_digit == 8)                   )? 1: 0;
+                                         (sec_h_digit == 6)|                   (sec_h_digit == 8)                   );//? 1: 0;
 										 
        segment2[5] = ((sec_h_digit == 0)|                                                         (sec_h_digit == 4)|
-                      (sec_h_digit == 5)|(sec_h_digit == 6)|                   (sec_h_digit == 8)|(sec_h_digit == 9))? 1: 0;
+                      (sec_h_digit == 5)|(sec_h_digit == 6)|                   (sec_h_digit == 8)|(sec_h_digit == 9));//? 1: 0;
 					  
        segment2[6] = (                                      (sec_h_digit == 2)|(sec_h_digit == 3)|(sec_h_digit == 4)|
-                      (sec_h_digit == 5)|(sec_h_digit == 6)|                   (sec_h_digit == 8)|(sec_h_digit == 9))? 1: 0;
+                      (sec_h_digit == 5)|(sec_h_digit == 6)|                   (sec_h_digit == 8)|(sec_h_digit == 9));//? 1: 0;
 //--------------------------------------------------------------------------------------------------------------------------------
        segment3[0] = ((min_l_digit == 0)|                   (min_l_digit == 2)|(min_l_digit == 3)|
-                      (min_l_digit == 5)|                   (min_l_digit == 7)|(min_l_digit == 8)|(min_l_digit == 9))? 1: 0;
+                      (min_l_digit == 5)|                   (min_l_digit == 7)|(min_l_digit == 8)|(min_l_digit == 9));//? 1: 0;
 					  
        segment3[1] = ((min_l_digit == 0)|(min_l_digit == 1)|(min_l_digit == 2)|(min_l_digit == 3)|(min_l_digit == 4)|
-                                                            (min_l_digit == 7)|(min_l_digit == 8)|(min_l_digit == 9))? 1: 0;
+                                                            (min_l_digit == 7)|(min_l_digit == 8)|(min_l_digit == 9));//? 1: 0;
 					  
        segment3[2] = ((min_l_digit == 0)|(min_l_digit == 1)|                   (min_l_digit == 3)|(min_l_digit == 4)|
-                      (min_l_digit == 5)|(min_l_digit == 6)|(min_l_digit == 7)|(min_l_digit == 8)|(min_l_digit == 9))? 1: 0;
+                      (min_l_digit == 5)|(min_l_digit == 6)|(min_l_digit == 7)|(min_l_digit == 8)|(min_l_digit == 9));//? 1: 0;
 					  
        segment3[3] = ((min_l_digit == 0)|                   (min_l_digit == 2)|(min_l_digit == 3)|
-                      (min_l_digit == 5)|(min_l_digit == 6)|                   (min_l_digit == 8)                   )? 1: 0;
+                      (min_l_digit == 5)|(min_l_digit == 6)|                   (min_l_digit == 8)                   );//? 1: 0;
 					  
        segment3[4] = ((min_l_digit == 0)|                   (min_l_digit == 2)|
-                                         (min_l_digit == 6)|                   (min_l_digit == 8)                   )? 1: 0;
+                                         (min_l_digit == 6)|                   (min_l_digit == 8)                   );//? 1: 0;
 										 
        segment3[5] = ((min_l_digit == 0)|                                                         (min_l_digit == 4)|
-                      (min_l_digit == 5)|(min_l_digit == 6)|                   (min_l_digit == 8)|(min_l_digit == 9))? 1: 0;
+                      (min_l_digit == 5)|(min_l_digit == 6)|                   (min_l_digit == 8)|(min_l_digit == 9));//? 1: 0;
 					  
        segment3[6] = (                                      (min_l_digit == 2)|(min_l_digit == 3)|(min_l_digit == 4)|
-                      (min_l_digit == 5)|(min_l_digit == 6)|                   (min_l_digit == 8)|(min_l_digit == 9))? 1: 0;
+                      (min_l_digit == 5)|(min_l_digit == 6)|                   (min_l_digit == 8)|(min_l_digit == 9));//? 1: 0;
 //-------------------------------------------------------------------------------------------------------------------------------
        segment4[0] = ((min_h_digit == 0)|                   (min_h_digit == 2)|(min_h_digit == 3)|
-                      (min_h_digit == 5)|                   (min_h_digit == 7)|(min_h_digit == 8)|(min_h_digit == 9))? 1: 0;
+                      (min_h_digit == 5)|                   (min_h_digit == 7)|(min_h_digit == 8)|(min_h_digit == 9));//? 1: 0;
 					  
        segment4[1] = ((min_h_digit == 0)|(min_h_digit == 1)|(min_h_digit == 2)|(min_h_digit == 3)|(min_h_digit == 4)|
-                                                            (min_h_digit == 7)|(min_h_digit == 8)|(min_h_digit == 9))? 1: 0;
+                                                            (min_h_digit == 7)|(min_h_digit == 8)|(min_h_digit == 9));//? 1: 0;
 					  
        segment4[2] = ((min_h_digit == 0)|(min_h_digit == 1)|                   (min_h_digit == 3)|(min_h_digit == 4)|
-                      (min_h_digit == 5)|(min_h_digit == 6)|(min_h_digit == 7)|(min_h_digit == 8)|(min_h_digit == 9))? 1: 0;
+                      (min_h_digit == 5)|(min_h_digit == 6)|(min_h_digit == 7)|(min_h_digit == 8)|(min_h_digit == 9));//? 1: 0;
 					  
        segment4[3] = ((min_h_digit == 0)|                   (min_h_digit == 2)|(min_h_digit == 3)|
-                      (min_h_digit == 5)|(min_h_digit == 6)|                   (min_h_digit == 8)                   )? 1: 0;
+                      (min_h_digit == 5)|(min_h_digit == 6)|                   (min_h_digit == 8)                   );//? 1: 0;
 					  
        segment4[4] = ((min_h_digit == 0)|                   (min_h_digit == 2)|
-                                         (min_h_digit == 6)|                   (min_h_digit == 8)                   )? 1: 0;
+                                         (min_h_digit == 6)|                   (min_h_digit == 8)                   );//? 1: 0;
 										 
        segment4[5] = ((min_h_digit == 0)|                                                         (min_h_digit == 4)|
-                      (min_h_digit == 5)|(min_h_digit == 6)|                   (min_h_digit == 8)|(min_h_digit == 9))? 1: 0;
+                      (min_h_digit == 5)|(min_h_digit == 6)|                   (min_h_digit == 8)|(min_h_digit == 9));//? 1: 0;
 					  
        segment4[6] = (                                      (min_h_digit == 2)|(min_h_digit == 3)|(min_h_digit == 4)|
-                      (min_h_digit == 5)|(min_h_digit == 6)|                   (min_h_digit == 8)|(min_h_digit == 9))? 1: 0;
+                      (min_h_digit == 5)|(min_h_digit == 6)|                   (min_h_digit == 8)|(min_h_digit == 9));//? 1: 0;
 //--------------------------------------------------------------------------------------------------------------------------------
 end
+
+`else
+assign o_segment1[0] = ((sec_l_digit == 0)|                   (sec_l_digit == 2)|(sec_l_digit == 3)|
+                      (sec_l_digit == 5)|                   (sec_l_digit == 7)|(sec_l_digit == 8)|(sec_l_digit == 9));//? 1: 0;
+					  
+assign o_segment1[1] = ((sec_l_digit == 0)|(sec_l_digit == 1)|(sec_l_digit == 2)|(sec_l_digit == 3)|(sec_l_digit == 4)|
+                                                            (sec_l_digit == 7)|(sec_l_digit == 8)|(sec_l_digit == 9));//? 1: 0;
+					  
+assign o_segment1[2] = ((sec_l_digit == 0)|(sec_l_digit == 1)|                   (sec_l_digit == 3)|(sec_l_digit == 4)|
+                      (sec_l_digit == 5)|(sec_l_digit == 6)|(sec_l_digit == 7)|(sec_l_digit == 8)|(sec_l_digit == 9));//? 1: 0;
+					  
+assign o_segment1[3] = ((sec_l_digit == 0)|                   (sec_l_digit == 2)|(sec_l_digit == 3)|
+                      (sec_l_digit == 5)|(sec_l_digit == 6)|                   (sec_l_digit == 8)                   );//? 1: 0;
+					  
+assign o_segment1[4] = ((sec_l_digit == 0)|                   (sec_l_digit == 2)|
+                                         (sec_l_digit == 6)|                   (sec_l_digit == 8)                   );//? 1: 0;
+										 
+assign o_segment1[5] = ((sec_l_digit == 0)|                                                         (sec_l_digit == 4)|
+                      (sec_l_digit == 5)|(sec_l_digit == 6)|                   (sec_l_digit == 8)|(sec_l_digit == 9));//? 1: 0;
+					  
+assign o_segment1[6] = (                                      (sec_l_digit == 2)|(sec_l_digit == 3)|(sec_l_digit == 4)|
+                      (sec_l_digit == 5)|(sec_l_digit == 6)|                   (sec_l_digit == 8)|(sec_l_digit == 9));//? 1: 0;
+//---------------------------------------------------------------------------------------------------------------------------------
+assign o_segment2[0] = ((sec_h_digit == 0)|                   (sec_h_digit == 2)|(sec_h_digit == 3)|
+                      (sec_h_digit == 5)|                   (sec_h_digit == 7)|(sec_h_digit == 8)|(sec_h_digit == 9));//? 1: 0;
+					  
+assign o_segment2[1] = ((sec_h_digit == 0)|(sec_h_digit == 1)|(sec_h_digit == 2)|(sec_h_digit == 3)|(sec_h_digit == 4)|
+                                                            (sec_h_digit == 7)|(sec_h_digit == 8)|(sec_h_digit == 9));//? 1: 0;
+					  
+assign o_segment2[2] = ((sec_h_digit == 0)|(sec_h_digit == 1)|                   (sec_h_digit == 3)|(sec_h_digit == 4)|
+                      (sec_h_digit == 5)|(sec_h_digit == 6)|(sec_h_digit == 7)|(sec_h_digit == 8)|(sec_h_digit == 9));//? 1: 0;
+					  
+assign o_segment2[3] = ((sec_h_digit == 0)|                   (sec_h_digit == 2)|(sec_h_digit == 3)|
+                      (sec_h_digit == 5)|(sec_h_digit == 6)|                   (sec_h_digit == 8)                   );//? 1: 0;
+					  
+assign o_segment2[4] = ((sec_h_digit == 0)|                   (sec_h_digit == 2)|
+                                         (sec_h_digit == 6)|                   (sec_h_digit == 8)                   );//? 1: 0;
+										 
+assign o_segment2[5] = ((sec_h_digit == 0)|                                                         (sec_h_digit == 4)|
+                      (sec_h_digit == 5)|(sec_h_digit == 6)|                   (sec_h_digit == 8)|(sec_h_digit == 9));//? 1: 0;
+					  
+assign o_segment2[6] = (                                      (sec_h_digit == 2)|(sec_h_digit == 3)|(sec_h_digit == 4)|
+                      (sec_h_digit == 5)|(sec_h_digit == 6)|                   (sec_h_digit == 8)|(sec_h_digit == 9));//? 1: 0;
+//--------------------------------------------------------------------------------------------------------------------------------
+assign o_segment3[0] = ((min_l_digit == 0)|                   (min_l_digit == 2)|(min_l_digit == 3)|
+                      (min_l_digit == 5)|                   (min_l_digit == 7)|(min_l_digit == 8)|(min_l_digit == 9));//? 1: 0;
+					  
+assign o_segment3[1] = ((min_l_digit == 0)|(min_l_digit == 1)|(min_l_digit == 2)|(min_l_digit == 3)|(min_l_digit == 4)|
+                                                            (min_l_digit == 7)|(min_l_digit == 8)|(min_l_digit == 9));//? 1: 0;
+					  
+assign o_segment3[2] = ((min_l_digit == 0)|(min_l_digit == 1)|                   (min_l_digit == 3)|(min_l_digit == 4)|
+                      (min_l_digit == 5)|(min_l_digit == 6)|(min_l_digit == 7)|(min_l_digit == 8)|(min_l_digit == 9));//? 1: 0;
+					  
+assign o_segment3[3] = ((min_l_digit == 0)|                   (min_l_digit == 2)|(min_l_digit == 3)|
+                      (min_l_digit == 5)|(min_l_digit == 6)|                   (min_l_digit == 8)                   );//? 1: 0;
+					  
+assign o_segment3[4] = ((min_l_digit == 0)|                   (min_l_digit == 2)|
+                                         (min_l_digit == 6)|                   (min_l_digit == 8)                   );//? 1: 0;
+										 
+assign o_segment3[5] = ((min_l_digit == 0)|                                                         (min_l_digit == 4)|
+                      (min_l_digit == 5)|(min_l_digit == 6)|                   (min_l_digit == 8)|(min_l_digit == 9));//? 1: 0;
+					  
+assign o_segment3[6] = (                                      (min_l_digit == 2)|(min_l_digit == 3)|(min_l_digit == 4)|
+                      (min_l_digit == 5)|(min_l_digit == 6)|                   (min_l_digit == 8)|(min_l_digit == 9));//? 1: 0;
+//-------------------------------------------------------------------------------------------------------------------------------
+assign o_segment4[0] = ((min_h_digit == 0)|                   (min_h_digit == 2)|(min_h_digit == 3)|
+                      (min_h_digit == 5)|                   (min_h_digit == 7)|(min_h_digit == 8)|(min_h_digit == 9));//? 1: 0;
+					  
+assign o_segment4[1] = ((min_h_digit == 0)|(min_h_digit == 1)|(min_h_digit == 2)|(min_h_digit == 3)|(min_h_digit == 4)|
+                                                            (min_h_digit == 7)|(min_h_digit == 8)|(min_h_digit == 9));//? 1: 0;
+					  
+assign o_segment4[2] = ((min_h_digit == 0)|(min_h_digit == 1)|                   (min_h_digit == 3)|(min_h_digit == 4)|
+                      (min_h_digit == 5)|(min_h_digit == 6)|(min_h_digit == 7)|(min_h_digit == 8)|(min_h_digit == 9));//? 1: 0;
+					  
+assign o_segment4[3] = ((min_h_digit == 0)|                   (min_h_digit == 2)|(min_h_digit == 3)|
+                      (min_h_digit == 5)|(min_h_digit == 6)|                   (min_h_digit == 8)                   );//? 1: 0;
+					  
+assign o_segment4[4] = ((min_h_digit == 0)|                   (min_h_digit == 2)|
+                                         (min_h_digit == 6)|                   (min_h_digit == 8)                   );//? 1: 0;
+										 
+assign o_segment4[5] = ((min_h_digit == 0)|                                                         (min_h_digit == 4)|
+                      (min_h_digit == 5)|(min_h_digit == 6)|                   (min_h_digit == 8)|(min_h_digit == 9));//? 1: 0;
+					  
+assign o_segment4[6] = (                                      (min_h_digit == 2)|(min_h_digit == 3)|(min_h_digit == 4)|
+                      (min_h_digit == 5)|(min_h_digit == 6)|                   (min_h_digit == 8)|(min_h_digit == 9));//? 1: 0;
+//--------------------------------------------------------------------------------------------------------------------------------
+
+`endif
 				  
 //------------ Add your adder here ----------
 //reset your logic
@@ -180,12 +271,15 @@ always@(posedge i_sec_pulse or posedge i_rst) begin
         end 
         else begin
             l_sec_reg[5:0] <= l_sec_reg[5:0] + 1'b1;
-            if (is_57_sec)
-                l_minute_pulse <= 1'b1;     
-            else if (is_29_sec) 
-                l_minute_pulse <= 1'b0;
-            else
-                l_minute_pulse <= l_minute_pulse;
+			l_minute_pulse <= is_57_sec? 1'b1:
+                              is_29_sec? 1'b0:
+                              l_minute_pulse;
+            //if (is_57_sec)
+            //    l_minute_pulse <= 1'b1;     
+            //else if (is_29_sec) 
+            //    l_minute_pulse <= 1'b0;
+            //else
+            //    l_minute_pulse <= l_minute_pulse;
         end
         
         //caculate sec one clk before latch in
@@ -252,6 +346,7 @@ always@(posedge i_sec_pulse or posedge i_rst) begin
     else begin
         minute_pulse_tap[1:0] <= {minute_pulse_tap[0], l_minute_pulse_wire};
         if(l_minute_pulse_posedge) begin
+
             if(is_59_min) begin
                 l_minute_reg[5:0] <= 6'b000000;
                 l_hr_pulse_reg <= 1'b1;
@@ -265,13 +360,17 @@ always@(posedge i_sec_pulse or posedge i_rst) begin
             end     
         end
         else begin
-        
-            if(is_59_min & is_57_sec)
-                l_hr_pulse_reg <= 1'b1;
-            else if(is_29_min & is_57_sec)
-                l_hr_pulse_reg <= 1'b0;
-            else 
-                l_hr_pulse_reg <= l_hr_pulse_reg;   
+
+            l_hr_pulse_reg <= (is_59_min & is_57_sec)? 1'b1:
+                              (is_29_min & is_57_sec)? 1'b0:
+                               l_hr_pulse_reg;
+							   
+            //if(is_59_min & is_57_sec)
+            //    l_hr_pulse_reg <= 1'b1;
+            //else if(is_29_min & is_57_sec)
+            //    l_hr_pulse_reg <= 1'b0;
+            //else 
+            //    l_hr_pulse_reg <= l_hr_pulse_reg;   
         
             l_minute_reg <= l_minute_reg;
             
@@ -333,12 +432,14 @@ always @ (posedge i_sec_pulse or posedge i_rst) begin
         hr_pulse_tap[1:0] <= {hr_pulse_tap[0], l_hr_pulse_wire};
         
         if(l_hr_pulse_posedge) begin
-            if(is_23_hr) begin
-                l_hr_reg[4:0] <= 5'b00000;
-            end
-            else begin
-                l_hr_reg[4:0] <= l_hr_reg[4:0] + 1'b1;
-            end 
+            l_hr_reg[4:0] <= (is_23_hr)? 5'b00000:
+                             l_hr_reg[4:0] + 1'b1;
+            //if(is_23_hr) begin
+            //    l_hr_reg[4:0] <= 5'b00000;
+            //end
+            //else begin
+            //    l_hr_reg[4:0] <= l_hr_reg[4:0] + 1'b1;
+            //end 
         end
         else begin
             //convert hr into 2 decimal digits for display
@@ -363,4 +464,3 @@ end
 
 endmodule
          
-
