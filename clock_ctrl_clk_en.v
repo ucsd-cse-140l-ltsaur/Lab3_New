@@ -45,6 +45,9 @@ module Lab3_140L (
 `define PRE_SYNC
 //`define POST_SYNC
 
+`define USE_USER_LIB
+//`define USE_N_BIT_ADDER
+
 reg [3:0] sec_l_digit;
 reg [3:0] sec_h_digit;
 
@@ -67,7 +70,8 @@ always @ (posedge i_clk) begin
 end
 
 
-
+//--------------------------------------------------------------------------------------------------------------------------------
+// output
 `ifdef POST_SYNC
 reg [6:0] segment1, segment2, segment3, segment4;
 assign o_segment1 = segment1;
@@ -77,7 +81,7 @@ assign o_segment4 = segment4;
 
 always @(posedge i_clk)
 begin
-    //if(sec_pulse_test) begin
+    if(sec_pulse_test) begin
        segment1[0] = ((sec_l_digit == 0)|                   (sec_l_digit == 2)|(sec_l_digit == 3)|
                       (sec_l_digit == 5)|                   (sec_l_digit == 7)|(sec_l_digit == 8)|(sec_l_digit == 9));//? 1: 0;
 					  
@@ -162,7 +166,7 @@ begin
        segment4[6] = (                                      (min_h_digit == 2)|(min_h_digit == 3)|(min_h_digit == 4)|
                       (min_h_digit == 5)|(min_h_digit == 6)|                   (min_h_digit == 8)|(min_h_digit == 9));//? 1: 0;
 //--------------------------------------------------------------------------------------------------------------------------------
-    //end
+    end
 end
 
 `else
@@ -252,7 +256,122 @@ assign o_segment4[6] = (                                      (min_h_digit == 2)
 //--------------------------------------------------------------------------------------------------------------------------------
 
 `endif
-				  
+		
+//--------------------------------------------------------------------------------------------------------------------------------
+// combinational logics	
+`ifdef USE_USER_LIB
+`ifdef USE_N_BIT_ADDER
+defparam u_sec_l.N = 4;
+wire [3:0] o_adder_sec_l;
+N_bit_adder u_sec_l(
+.sum (o_adder_sec_l)  , // Output of the adder
+.carry()              , // Carry output of adder
+.r1 (sec_l_digit)     , // first input
+.r2 (4'h1)            , // second input
+.ci (1'b0)              // carry input
+);
+
+defparam u_sec_h.N = 4;
+wire [3:0] o_adder_sec_h;
+N_bit_adder u_sec_h(
+.sum (o_adder_sec_h)  , // Output of the adder
+.carry()              , // Carry output of adder
+.r1 (sec_h_digit)     , // first input
+.r2 (4'h1)            , // second input
+.ci (1'b0)              // carry input
+);
+
+defparam u_min_l.N = 4;
+wire [3:0] o_adder_min_l;
+N_bit_adder u_min_l(
+.sum (o_adder_min_l)  , // Output of the adder
+.carry()              , // Carry output of adder
+.r1 (min_l_digit)     , // first input
+.r2 (4'h1)            , // second input
+.ci (1'b0)              // carry input
+);
+
+defparam u_min_h.N = 4;
+wire [3:0] o_adder_min_h;
+N_bit_adder u_min_h(
+.sum (o_adder_min_h)  , // Output of the adder
+.carry()              , // Carry output of adder
+.r1 (min_h_digit)     , // first input
+.r2 (4'h1)            , // second input
+.ci (1'b0)              // carry input
+);
+
+defparam u_hr_l.N = 4;
+wire [3:0] o_adder_hr_l;
+N_bit_adder u_hr_l(
+.sum (o_adder_hr_l)   , // Output of the adder
+.carry()              , // Carry output of adder
+.r1 (hr_l_digit)      , // first input
+.r2 (4'h1)            , // second input
+.ci (1'b0)              // carry input
+);
+
+defparam u_hr_h.N = 2;
+wire [1:0] o_adder_hr_h;
+N_bit_adder u_hr_h(
+.sum (o_adder_hr_h)   , // Output of the adder
+.carry()              , // Carry output of adder
+.r1 (hr_h_digit)      , // first input
+.r2 (2'h1)            , // second input
+.ci (1'b0)              // carry input
+);
+`else  // ~USE_N_BIT_ADDER
+
+wire [3:0] o_adder_sec_l;
+defparam u_sec_l.N = 4;
+N_bit_counter u_sec_l(
+.result (o_adder_sec_l)       , // Output
+.r1 (sec_l_digit)                      , // input
+.up (1'b1)
+);
+
+wire [3:0] o_adder_sec_h;
+defparam u_sec_h.N = 4;
+N_bit_counter u_sec_h(
+.result (o_adder_sec_h)       , // Output
+.r1 (sec_h_digit)                      , // input
+.up (1'b1)
+);
+
+wire [3:0] o_adder_min_l;
+defparam u_min_l.N = 4;
+N_bit_counter u_min_l(
+.result (o_adder_min_l)       , // Output
+.r1 (min_l_digit)                      , // input
+.up (1'b1)
+);
+
+wire [3:0] o_adder_min_h;
+defparam u_min_h.N = 4;
+N_bit_counter u_min_h(
+.result (o_adder_min_h)       , // Output
+.r1 (min_h_digit)                      , // input
+.up (1'b1)
+);
+
+wire [3:0] o_adder_hr_l;
+defparam u_hr_l.N = 4;
+N_bit_counter u_hr_l(
+.result (o_adder_hr_l)       , // Output
+.r1 (hr_l_digit)                      , // input
+.up (1'b1)
+);
+
+wire [1:0] o_adder_hr_h;
+defparam u_hr_h.N = 2;
+N_bit_counter u_hr_h(
+.result (o_adder_hr_h)       , // Output
+.r1 (hr_h_digit)                      , // input
+.up (1'b1)
+);
+`endif // ~USE_N_BIT_ADDER
+`endif // USE_USER_LIB
+
 //--------------------------------------------------------------------------------------------------------------------------------
 // sequencial logics
 wire is_59_sec;
@@ -278,7 +397,7 @@ always@(posedge i_sec_pulse or posedge i_rst) begin
     else begin
 
 `endif
-        sec_l_digit[3:0] <= sec_l_digit[3:0] + 4'h1;
+        sec_l_digit[3:0] <= o_adder_sec_l; //sec_l_digit[3:0] + 4'h1;
 	
         if(is_59_sec) begin
             sec_l_digit[3:0] <= 4'b0000;
@@ -286,7 +405,7 @@ always@(posedge i_sec_pulse or posedge i_rst) begin
         end 
         else if(~|(sec_l_digit ^ 4'd9))  begin
                 sec_l_digit <= 0;
-                sec_h_digit <= sec_h_digit + 1;
+                sec_h_digit <= o_adder_sec_h; //sec_h_digit + 1;
         end         
     end
 end
@@ -318,7 +437,7 @@ always@(posedge i_sec_pulse or posedge i_rst) begin
     end 
     else begin
 `endif
-        min_l_digit[3:0] <= min_l_digit[3:0] + 4'h1;
+        min_l_digit[3:0] <= o_adder_min_l; //min_l_digit[3:0] + 4'h1;
 	
         if(is_59_min) begin
             min_l_digit[3:0] <= 4'b0000;
@@ -326,7 +445,7 @@ always@(posedge i_sec_pulse or posedge i_rst) begin
         end 
         else if(~|(min_l_digit ^ 4'd9))  begin
                 min_l_digit <= 0;
-                min_h_digit <= min_h_digit + 1;
+                min_h_digit <= o_adder_min_h; //min_h_digit + 1;
         end         
     end
 end
@@ -357,7 +476,7 @@ always@(posedge i_sec_pulse or posedge i_rst) begin
     end 
     else begin
 `endif
-        hr_l_digit[3:0] <= hr_l_digit[3:0] + 4'h1;
+        hr_l_digit[3:0] <= o_adder_hr_l[3:0]; //hr_l_digit[3:0] + 4'h1;
 	
         if(is_23_hr) begin
             hr_l_digit[3:0] <= 4'b0000;
@@ -365,7 +484,7 @@ always@(posedge i_sec_pulse or posedge i_rst) begin
         end 
         else if(~|(hr_l_digit ^ 4'd9))  begin
                 hr_l_digit <= 0;
-                hr_h_digit <= hr_h_digit + 1;
+                hr_h_digit[1:0] <= o_adder_hr_h[1:0]; //hr_h_digit + 1;
         end         
     end
 end
