@@ -160,10 +160,13 @@ assign trig_rd = (&l_count[9:1]) & (~l_count[10]);
 // slow down read clk
 wire vram_rd_clk;
 assign vram_rd_clk = l_count[4];
-
+reg [1:0] vram_rd_clk_det;
 // latch in @ the negedge of read clk
-always @(negedge vram_rd_clk) begin
-    r_data_reg[7:0] <= r_data_wire[7:0];
+//always @(negedge vram_rd_clk) begin
+always @ (negedge vram_clk) begin
+    vram_rd_clk_det[1:0] = {vram_rd_clk_det[0], vram_rd_clk};
+    
+    r_data_reg[7:0] <= (vram_rd_clk_det[0] & ~vram_rd_clk_det[1])? r_data_wire[7:0]: r_data_reg[7:0];
 end
 `ifdef USE_USER_LIB
 `ifdef USE_N_BIT_ADDER
@@ -188,14 +191,19 @@ N_bit_counter vbuf_raddr(
 `endif // ~USE_N_BIT_ADDER
 `endif // USE_USER_LIB
 
-always @(posedge trig_rd) begin
+reg [1:0] trig_rd_det;
+//always @(posedge trig_rd) begin
+always @(posedge vram_clk) begin
     if(reset)
 	    r_addr <= 0;
 	else
+       trig_rd_det[1:0] = {trig_rd_det[0], trig_rd};
 `ifdef USE_USER_LIB
-        r_addr[8:0] <=  o_adder_vbuf_r_addr[8:0]; 
+        r_addr[8:0] <=  (trig_rd_det[0] & ~trig_rd_det[1])? o_adder_vbuf_r_addr[8:0]: r_addr[8:0]; 
+        //r_addr[8:0] <=  o_adder_vbuf_r_addr[8:0]; 
 `else
-        r_addr[8:0] <=  r_addr + 1; 
+        r_addr[8:0] <=  (trig_rd_det[0] & ~trig_rd_det[1])? r_addr + 1: r_addr[8:0]; 
+        //r_addr[8:0] <=  r_addr + 1; 
 `endif
 end
 
@@ -554,7 +562,7 @@ assign w_data [7:0] = (vram_wr_4_user_en)? w_data_user[7:0] : w_data_displaying_
 latticeDulPortRam512x8 mem0(
 .RDATA_c(r_data_wire[7:0]),  //7:0
 .RADDR_c(r_addr_wire[8:0]),        //8:0
-.RCLK_c(vram_rd_clk),
+.RCLK_c(vram_clk),//vram_rd_clk),
 .RCLKE_c(1'b1),
 .RE_c(1'b1),
 
