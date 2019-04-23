@@ -305,13 +305,16 @@ module Glue_Lab2(
     always @(posedge clk) begin
       Gl_tx_data_reg <= is_hexplus ? bu_rx_data : L2_adder_data;
       Gl_tx_data_rdy_reg <= is_hexplus | L2_adder_rdy ;
+//      Gl_tx_data_reg <= bu_rx_data;
+//      Gl_tx_data_rdy_reg <= bu_rx_data_rdy;
     end
 
 wire o_One_Sec_Pulse;
-
+//defparam uu0.CLK_FREQ = 48000000;
+defparam uu0.CLK_FREQ = 96000000;
 Half_Sec_Pulse_Per_Sec uu0 (
 .i_rst (Gl_rst),       //reset
-.i_clk (clk),       //system clk 12MHz 
+.i_clk (clk),       //PLL clock 
 .o_sec_tick (o_One_Sec_Pulse)  //0.5sec 1 and 0.5sec 0
 );
 
@@ -331,7 +334,10 @@ Lab3_140L uu1(
 .o_segment4(segment4)         // 7-segment1 (LHS)
 );
 
-
+defparam uu2.CLKFREQ  = 96000000;    // frequency of incoming signal 'clk'
+defparam uu2.BAUD     =  921600;
+//defparam uu2.CLKFREQ  = 48000000;    // frequency of incoming signal 'clk'
+//defparam uu2.BAUD     =  460800;
 vbuf uu2(
 .reset (Gl_rst),
 .vram_clk (clk),
